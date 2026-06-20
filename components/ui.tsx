@@ -93,6 +93,7 @@ export function Modal({
   children,
   wide,
   size = "md",
+  fullScreen,
 }: {
   open: boolean;
   onClose: () => void;
