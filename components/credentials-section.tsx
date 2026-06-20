@@ -18,6 +18,24 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+/** Gruppiert Logins nach Projekt; Einträge ohne Projekt kommen ans Ende. */
+function groupByProject(creds: Credential[], projects: Project[]) {
+  const groups: { project: Project | null; items: Credential[] }[] = [];
+  const indexById = new Map<string, number>();
+
+  for (const c of creds) {
+    const key = c.project_id ?? "none";
+    if (!indexById.has(key)) {
+      const project = projects.find((p) => p.id === c.project_id) ?? null;
+      indexById.set(key, groups.length);
+      groups.push({ project, items: [] });
+    }
+    groups[indexById.get(key)!].items.push(c);
+  }
+  // "Ohne Projekt" ans Ende sortieren
+  return groups.sort((a, b) => (a.project ? 0 : 1) - (b.project ? 0 : 1));
+}
+
 export function CredentialsSection({
   projectId,
   showProjectColumn,
@@ -81,6 +99,39 @@ export function CredentialsSection({
           title="Keine Logins gespeichert"
           hint="Speichere Zugangsdaten zu GitHub, Supabase, Cloudflare & Co. – verschlüsselt."
         />
+      ) : showProjectColumn ? (
+        // Tresor-Ansicht: nach Projekt gruppiert
+        <div className="space-y-5">
+          {groupByProject(creds, projects).map(({ project, items }) => (
+            <div key={project?.id ?? "none"}>
+              <div className="mb-2 flex items-center gap-2 px-1">
+                <span
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ background: project?.color ?? "#52525b" }}
+                />
+                <h3 className="text-sm font-semibold">
+                  {project?.title ?? "Ohne Projekt"}
+                </h3>
+                <span className="text-xs text-muted">({items.length})</span>
+              </div>
+              <div className="space-y-2">
+                {items.map((c) => (
+                  <CredentialRow
+                    key={c.id}
+                    cred={c}
+                    project={project ?? undefined}
+                    showProject={false}
+                    onEdit={() => {
+                      setEditing(c);
+                      setModal(true);
+                    }}
+                    onDelete={() => remove(c.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="space-y-2">
           {creds.map((c) => (
@@ -88,7 +139,7 @@ export function CredentialsSection({
               key={c.id}
               cred={c}
               project={projects.find((p) => p.id === c.project_id)}
-              showProject={showProjectColumn}
+              showProject={false}
               onEdit={() => {
                 setEditing(c);
                 setModal(true);

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Field, Modal } from "@/components/ui";
-import { PRIORITY_META, STATUS_META, STATUS_ORDER } from "@/lib/constants";
+import { isIdea, PRIORITY_META, STATUS_META, STATUS_ORDER } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/client";
 import type { Priority, Project, ProjectStatus } from "@/lib/types";
 import { Loader2 } from "lucide-react";
@@ -14,16 +14,18 @@ export function ProjectFormModal({
   onClose,
   onSaved,
   project,
+  defaultStatus = "idee",
 }: {
   open: boolean;
   onClose: () => void;
   onSaved: (p: Project) => void;
   project?: Project | null;
+  defaultStatus?: ProjectStatus;
 }) {
   const supabase = createClient();
   const [title, setTitle] = useState(project?.title ?? "");
   const [description, setDescription] = useState(project?.description ?? "");
-  const [status, setStatus] = useState<ProjectStatus>(project?.status ?? "idee");
+  const [status, setStatus] = useState<ProjectStatus>(project?.status ?? defaultStatus);
   const [priority, setPriority] = useState<Priority>(project?.priority ?? "mittel");
   const [progress, setProgress] = useState(project?.progress ?? 0);
   const [color, setColor] = useState(project?.color ?? COLORS[0]);
@@ -78,7 +80,13 @@ export function ProjectFormModal({
       open={open}
       onClose={onClose}
       wide
-      title={project ? "Projekt bearbeiten" : "Neue Idee / neues Projekt"}
+      title={
+        project
+          ? "Bearbeiten"
+          : isIdea(defaultStatus)
+            ? "Neue Idee"
+            : "Neues Projekt"
+      }
     >
       <form onSubmit={save} className="space-y-4">
         <Field label="Titel">

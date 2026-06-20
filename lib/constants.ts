@@ -16,6 +16,16 @@ export const STATUS_ORDER: ProjectStatus[] = [
   "idee", "planung", "aktiv", "pausiert", "fertig", "verworfen",
 ];
 
+// Ideen = noch nicht in Umsetzung · Projekte = wird umgesetzt / fertig
+export const IDEA_STATUSES: ProjectStatus[] = ["idee", "planung"];
+export const PROJECT_STATUSES: ProjectStatus[] = [
+  "aktiv", "pausiert", "fertig", "verworfen",
+];
+
+export function isIdea(status: ProjectStatus): boolean {
+  return IDEA_STATUSES.includes(status);
+}
+
 export const PRIORITY_META: Record<Priority, { label: string; color: string }> = {
   niedrig: { label: "Niedrig", color: "text-zinc-400" },
   mittel:  { label: "Mittel",  color: "text-sky-400" },

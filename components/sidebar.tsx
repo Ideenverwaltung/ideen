@@ -8,6 +8,7 @@ import {
   FolderKanban,
   LayoutDashboard,
   Lightbulb,
+  ListTodo,
   Lock,
   LockOpen,
   LogOut,
@@ -18,7 +19,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 const NAV = [
   { href: "/dashboard", label: "Übersicht", icon: LayoutDashboard },
-  { href: "/projekte", label: "Projekte & Ideen", icon: FolderKanban },
+  { href: "/ideen", label: "Ideen", icon: Lightbulb },
+  { href: "/projekte", label: "Projekte", icon: FolderKanban },
+  { href: "/todos", label: "To-Dos & Stand", icon: ListTodo },
   { href: "/kalender", label: "Kalender", icon: CalendarDays },
   { href: "/tresor", label: "Login-Tresor", icon: KeyRound },
 ];
