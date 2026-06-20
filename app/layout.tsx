@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description: "Übersicht über alle Startup-Ideen, Projekte, Logins & Termine",
 };
 
+// Kein aggressives Edge-Caching der Seiten – neue Deployments sind sofort sichtbar.
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
