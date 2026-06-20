@@ -30,8 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
+# .env enthält NUR öffentliche Werte (Supabase-URL + anon/publishable Key) –
+# absichtlich committet, damit der Cloudflare-Build sie kennt. Secrets gehören
+# in .env.local (bleibt ignoriert).
+!.env
 
 # vercel
 .vercel
