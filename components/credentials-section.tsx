@@ -1,5 +1,6 @@
 "use client";
 
+import { Combobox } from "@/components/combobox";
 import { Button, Card, EmptyState, Field, Modal } from "@/components/ui";
 import { useVault } from "@/components/vault-context";
 import { SERVICE_PRESETS } from "@/lib/constants";
@@ -363,19 +364,14 @@ function CredentialFormModal({
       <form onSubmit={save} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <Field label="Anwendung / Dienst">
-            <input
-              list="service-presets"
+            <Combobox
               value={service}
-              onChange={(e) => setService(e.target.value)}
+              onChange={setService}
+              options={SERVICE_PRESETS.filter((s) => s !== "Sonstiges")}
               placeholder="z.B. GitHub, Supabase …"
               required
               autoFocus
             />
-            <datalist id="service-presets">
-              {SERVICE_PRESETS.filter((s) => s !== "Sonstiges").map((s) => (
-                <option key={s} value={s} />
-              ))}
-            </datalist>
           </Field>
           <Field label="Bezeichnung (optional)">
             <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="z.B. Prod-Account" />
