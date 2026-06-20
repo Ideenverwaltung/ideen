@@ -337,7 +337,13 @@ function EventModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={editing ? "Termin bearbeiten" : "Neuer Termin"}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      fullScreen
+      icon={<CalendarDays size={20} />}
+      title={editing ? "Termin bearbeiten" : "Neuer Termin"}
+    >
       <form onSubmit={save} className="space-y-4">
         <Field label="Titel">
           <input

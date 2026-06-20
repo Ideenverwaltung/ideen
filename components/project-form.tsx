@@ -4,7 +4,7 @@ import { Button, Field, Modal } from "@/components/ui";
 import { isIdea, PRIORITY_META, STATUS_META, STATUS_ORDER } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/client";
 import type { Priority, Project, ProjectStatus } from "@/lib/types";
-import { Loader2 } from "lucide-react";
+import { Lightbulb, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 const COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#06b6d4", "#ef4444"];
@@ -79,7 +79,8 @@ export function ProjectFormModal({
     <Modal
       open={open}
       onClose={onClose}
-      wide
+      fullScreen
+      icon={<Lightbulb size={20} />}
       title={
         project
           ? "Bearbeiten"
