@@ -279,7 +279,7 @@ function CredentialFormModal({
 }) {
   const supabase = createClient();
   const { decrypt } = useVault();
-  const [service, setService] = useState("GitHub");
+  const [service, setService] = useState("");
   const [label, setLabel] = useState("");
   const [username, setUsername] = useState("");
   const [url, setUrl] = useState("");
@@ -308,7 +308,7 @@ function CredentialFormModal({
             : "",
         );
       } else {
-        setService("GitHub");
+        setService("");
         setLabel("");
         setUsername("");
         setUrl("");
@@ -362,12 +362,20 @@ function CredentialFormModal({
     <Modal open={open} onClose={onClose} wide title={editing ? "Login bearbeiten" : "Login hinzufügen"}>
       <form onSubmit={save} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Dienst">
-            <select value={service} onChange={(e) => setService(e.target.value)}>
-              {SERVICE_PRESETS.map((s) => (
-                <option key={s}>{s}</option>
+          <Field label="Anwendung / Dienst">
+            <input
+              list="service-presets"
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+              placeholder="z.B. GitHub, Supabase …"
+              required
+              autoFocus
+            />
+            <datalist id="service-presets">
+              {SERVICE_PRESETS.filter((s) => s !== "Sonstiges").map((s) => (
+                <option key={s} value={s} />
               ))}
-            </select>
+            </datalist>
           </Field>
           <Field label="Bezeichnung (optional)">
             <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="z.B. Prod-Account" />
