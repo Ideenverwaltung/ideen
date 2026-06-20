@@ -363,7 +363,7 @@ function CredentialFormModal({
     <Modal
       open={open}
       onClose={onClose}
-      size="xl"
+      fullScreen
       icon={<KeyRound size={20} />}
       title={editing ? "Login bearbeiten" : "Login hinzufügen"}
       subtitle="Verschlüsselt gespeichert – nur mit deinem Master-Passwort lesbar."
