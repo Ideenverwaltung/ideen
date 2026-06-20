@@ -88,46 +88,73 @@ export function Modal({
   open,
   onClose,
   title,
+  subtitle,
+  icon,
   children,
   wide,
+  size = "md",
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
+  subtitle?: string;
+  icon?: React.ReactNode;
   children: React.ReactNode;
+  /** @deprecated nutze size */
   wide?: boolean;
+  size?: "md" | "lg" | "xl";
 }) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
-    if (open) document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    if (open) {
+      document.addEventListener("keydown", onKey);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
   }, [open, onClose]);
 
   if (!open) return null;
+
+  const maxW =
+    size === "xl" ? "max-w-3xl" : size === "lg" || wide ? "max-w-2xl" : "max-w-md";
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 p-4 backdrop-blur-sm sm:items-center sm:p-6"
       onClick={onClose}
     >
       <div
         className={cn(
-          "animate-in w-full rounded-2xl border border-border bg-panel shadow-2xl",
-          wide ? "max-w-2xl" : "max-w-md",
+          "animate-in flex max-h-[92vh] w-full flex-col overflow-hidden rounded-2xl border border-border bg-panel shadow-2xl",
+          maxW,
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <h3 className="font-semibold">{title}</h3>
+        <div className="flex items-start justify-between gap-3 border-b border-border px-6 py-4">
+          <div className="flex items-center gap-3">
+            {icon && (
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand/15 text-brand">
+                {icon}
+              </div>
+            )}
+            <div>
+              <h3 className="text-lg font-semibold leading-tight">{title}</h3>
+              {subtitle && <p className="mt-0.5 text-sm text-muted">{subtitle}</p>}
+            </div>
+          </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1 text-muted hover:bg-white/5 hover:text-white"
+            className="rounded-lg p-1.5 text-muted hover:bg-white/5 hover:text-white"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
-        <div className="p-5">{children}</div>
+        <div className="overflow-y-auto px-6 py-5">{children}</div>
       </div>
     </div>
   );

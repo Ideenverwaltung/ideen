@@ -360,8 +360,15 @@ function CredentialFormModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} wide title={editing ? "Login bearbeiten" : "Login hinzufügen"}>
-      <form onSubmit={save} className="space-y-4">
+    <Modal
+      open={open}
+      onClose={onClose}
+      size="xl"
+      icon={<KeyRound size={20} />}
+      title={editing ? "Login bearbeiten" : "Login hinzufügen"}
+      subtitle="Verschlüsselt gespeichert – nur mit deinem Master-Passwort lesbar."
+    >
+      <form onSubmit={save} className="space-y-5">
         <div className="grid grid-cols-2 gap-4">
           <Field label="Anwendung / Dienst">
             <Combobox
