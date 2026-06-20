@@ -53,12 +53,40 @@ Dann [http://localhost:3000](http://localhost:3000) öffnen → **Konto erstelle
 
 ---
 
-## ☁️ Online stellen (Vercel)
+## ☁️ Online stellen (Cloudflare Workers)
 
-1. Projekt zu einem Git-Repo machen und zu GitHub pushen.
-2. Auf [vercel.com](https://vercel.com) → **Add New Project** → Repo auswählen.
-3. Bei **Environment Variables** dieselben zwei Werte aus `.env.local` eintragen.
-4. **Deploy** — fertig, von überall erreichbar.
+Die App ist via **OpenNext-Adapter** für Cloudflare Workers vorbereitet
+(`wrangler.jsonc`, `open-next.config.ts`). Code liegt auf GitHub:
+**https://github.com/Julcons/ideen-cockpit** (privat).
+
+> ⚠️ Die beiden `NEXT_PUBLIC_*`-Werte werden **beim Build** in die App eingebaut.
+> Sie müssen also zum Build-Zeitpunkt vorhanden sein.
+
+### Variante A – schnell per CLI (vom eigenen Rechner)
+
+```bash
+npx wrangler login          # einmalig: Cloudflare-Konto verbinden
+npm run deploy              # baut + deployt (liest .env.local fürs Build)
+```
+
+Danach bekommst du eine URL wie `https://ideen-cockpit.<dein-name>.workers.dev`.
+
+### Variante B – automatisch bei jedem Push (empfohlen)
+
+1. Cloudflare-Dashboard → **Workers & Pages → Create → Workers → Connect to Git**.
+2. Repo `Julcons/ideen-cockpit` auswählen.
+3. **Build command:** `npx opennextjs-cloudflare build`
+   **Deploy command:** `npx wrangler deploy`
+4. Unter **Variables and Secrets** (für den Build) eintragen:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+5. Speichern → Cloudflare baut & deployt automatisch bei jedem `git push`.
+
+### Lokal wie in Produktion testen (Workers-Runtime)
+
+```bash
+npm run preview            # baut + startet die App in der echten workerd-Runtime
+```
 
 ---
 
